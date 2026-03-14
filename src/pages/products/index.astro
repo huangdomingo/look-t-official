@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchProducts } from '../../lib/wordpress';
+
+const products = await fetchProducts(100);
+---
+
+<Layout title="產品型錄 | Look-T 真空管工作室">
+  <main>
+    <header class="page-hero">
+      <div class="container">
+        <h1>產品型錄</h1>
+        <p>Plasma Tweeter｜Tube Amp</p>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container">
+        <div class="grid">
+          {products.map((product: any) => (
+            <a href={`/products/${product.slug}`} class="card">
+              {product._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
+                <div class="card-image" style={`background-image: url(${product._embedded['wp:featuredmedia'][0].source_url})`}></div>
+              )}
+              <div class="card-content">
+                <h2>{product.title?.rendered}</h2>
+                {product.acf?.short_summary && <p>{product.acf.short_summary}</p>}
+                <span class="cta">{product.acf?.cta_label || '立即洽詢'}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --primary: #d4af37;
+    --text: #e0e0e0;
+    --text-muted: #a0a0a0;
+  }
+  body { background: var(--bg); color: var(--text); font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; margin: 0; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+  .page-hero { padding: 60px 0; text-align: center; border-bottom: 2px solid var(--primary); }
+  h1 { font-size: 2.5rem; margin: 0; color: var(--primary); }
+  .page-hero p { color: var(--text-muted); margin: 10px 0 0; }
+  .section { padding: 60px 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+  .card { background: var(--surface); border-radius: 8px; overflow: hidden; border: 1px solid #333; text-decoration: none; color: var(--text); transition: transform 0.3s; }
+  .card:hover { transform: translateY(-5px); }
+  .card-image { height: 220px; background-size: cover; background-position: center; }
+  .card-content { padding: 25px; }
+  h2 { margin: 0 0 10px; font-size: 1.4rem; color: var(--text); }
+  p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0 0 15px; }
+  .cta { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.95rem; }
+</style>

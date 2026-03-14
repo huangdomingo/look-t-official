@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchProductBySlug, fetchProducts } from '../../lib/wordpress';
+
+export async function getStaticPaths() {
+  const products = await fetchProducts(100);
+  return products.map((product: any) => ({
+    params: { slug: product.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+const product = await fetchProductBySlug(slug!);
+if (!product) return Astro.redirect('/products');
+---
+
+<Layout title={`${product.title?.rendered} | Look-T 真空管工作室`}>
+  <main>
+    <div class="container">
+      <a href="/products" class="back">← 返回產品型錄</a>
+
+      <article class="product">
+        {product._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
+          <img class="hero-img" src={product._embedded['wp:featuredmedia'][0].source_url} alt={product.title?.rendered} />
+        )}
+
+        <h1>{product.title?.rendered}</h1>
+
+        {product.acf?.short_summary && <p class="summary">{product.acf.short_summary}</p>}
+
+        <div class="content" set:html={product.content?.rendered} />
+
+        {product.acf?.spec_highlight && (
+          <div class="specs">
+            <h2>規格摘要</h2>
+            <p>{product.acf.spec_highlight}</p>
+          </div>
+        )}
+
+        {product.acf?.cta_url && (
+          <a href={product.acf.cta_url} class="cta-btn">{product.acf.cta_label || '立即洽詢'}</a>
+        )}
+      </article>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root { --bg: #0f0f0f; --surface: #1a1a1a; --primary: #d4af37; --text: #e0e0e0; --text-muted: #a0a0a0; }
+  body { background: var(--bg); color: var(--text); font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; margin: 0; }
+  .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+  .back { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
+  .back:hover { text-decoration: underline; }
+  .product { margin-top: 30px; }
+  .hero-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 30px; }
+  h1 { font-size: 2.2rem; color: var(--primary); margin: 0 0 15px; }
+  .summary { font-size: 1.1rem; color: var(--text-muted); border-left: 3px solid var(--primary); padding-left: 15px; margin: 0 0 30px; }
+  .content { line-height: 1.8; color: var(--text); }
+  .specs { background: var(--surface); border-radius: 8px; padding: 25px; margin: 30px 0; border: 1px solid #333; }
+  .specs h2 { color: var(--primary); margin: 0 0 15px; font-size: 1.2rem; }
+  .cta-btn { display: inline-block; margin-top: 30px; padding: 14px 35px; background: var(--primary); color: #000; font-weight: bold; border-radius: 4px; text-decoration: none; font-size: 1rem; }
+  .cta-btn:hover { opacity: 0.85; }
+</style>

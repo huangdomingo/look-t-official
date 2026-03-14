@@ -9,7 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.17.1",
+    "astro": "^5.18.1",
     "axios": "^1.13.5"
   }
 }

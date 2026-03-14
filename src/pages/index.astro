@@ -1,127 +1,115 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { fetchProducts, fetchRepairLogs } from '../lib/wordpress';
 
-// 模擬從 WordPress 抓取的真實資料 (符合規格書 V0.9)
-const repairLogs = [
-	{
-		title: "1960s 復古真空管擴大機：低頻雜訊排除",
-		model: "Luxman SQ-38D",
-		symptom: "右聲道出現持續性低頻嗡聲",
-		solution: "更換老化電容並重做焊點，恢復純淨音質。",
-		date: "2026-02-10",
-		image: "https://images.unsplash.com/photo-1558485940-8ee7971455da?auto=format&fit=crop&q=80&w=800"
-	},
-	{
-		title: "職人級保養：300B 功率管配對與偏壓調整",
-		model: "Look-T Custom 300B",
-		symptom: "使用時數達 2000 小時，音質略顯乾澀",
-		solution: "精確配對全新真空管，重新校準偏壓至最佳值。",
-		date: "2026-02-11",
-		image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&q=80&w=800"
-	}
-];
+const products = await fetchProducts(6);
+const repairLogs = await fetchRepairLogs(4);
 ---
 
 <Layout title="Look-T 真空管工作室">
-	<main>
-		<header class="hero">
-			<div class="container">
-				<h1>Look-T 真空管工作室</h1>
-				<p class="tagline">追求極致音質的工藝美學</p>
-				<nav class="nav-links">
-					<span>首頁</span> | <span>產品型錄</span> | <span>維修實錄</span> | <span>FAQ</span>
-				</nav>
-			</div>
-		</header>
+ <main>
+  <header class="hero">
+   <div class="container">
+    <h1>Look-T 真空管工作室</h1>
+    <p class="tagline">追求極致音質的工藝美學</p>
+    <nav class="nav-links">
+     <span>首頁</span> | <span>產品型錄</span> | <span>維修實錄</span> | <span>FAQ</span>
+    </nav>
+   </div>
+  </header>
 
-		<section class="section">
-			<div class="container">
-				<div class="section-header">
-					<h2>職人維修實錄</h2>
-					<a href="#" class="more-link">查看更多案例 →</a>
-				</div>
-				<div class="grid">
-					{repairLogs.map(log => (
-						<article class="card">
-							<div class="card-image" style={`background-image: url(${log.image})`}></div>
-							<div class="card-content">
-								<span class="date">{log.date}</span>
-								<h3>{log.title}</h3>
-								<p><strong>機型：</strong>{log.model}</p>
-								<p><strong>症狀：</strong>{log.symptom}</p>
-								<div class="status-tag">完修</div>
-							</div>
-						</article>
-					))}
-				</div>
-			</div>
-		</section>
+  <section class="section">
+   <div class="container">
+    <div class="section-header">
+     <h2>職人維修實錄</h2>
+     <a href="/repair-logs" class="more-link">查看更多案例 →</a>
+    </div>
+    <div class="grid">
+     {repairLogs.map((log: any) => (
+      <article class="card">
+       {log._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
+        <div class="card-image" style={`background-image: url(${log._embedded['wp:featuredmedia'][0].source_url})`}></div>
+       )}
+       <div class="card-content">
+        <span class="date">{log.date?.slice(0, 10)}</span>
+        <h3>{log.title?.rendered}</h3>
+        {log.acf?.symptom && <p><strong>症狀：</strong>{log.acf.symptom}</p>}
+        <div class="status-tag">完修</div>
+       </div>
+      </article>
+     ))}
+    </div>
+   </div>
+  </section>
 
-		<section class="section alt-bg">
-			<div class="container">
-				<div class="section-header">
-					<h2>精選產品型錄</h2>
-				</div>
-				<div class="grid">
-					<div class="card">
-						<div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1594122230689-45899d9e6f69?auto=format&fit=crop&q=80&w=800')"></div>
-						<div class="card-content">
-							<h3>Plasma Tweeter X1</h3>
-							<p>極致高頻的呼吸感，為您的音場注入生命力。</p>
-							<span class="cta">立即洽詢</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</main>
+  <section class="section alt-bg">
+   <div class="container">
+    <div class="section-header">
+     <h2>精選產品型錄</h2>
+     <a href="/products" class="more-link">查看全部產品 →</a>
+    </div>
+    <div class="grid">
+     {products.map((product: any) => (
+      <div class="card">
+       {product._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
+        <div class="card-image" style={`background-image: url(${product._embedded['wp:featuredmedia'][0].source_url})`}></div>
+       )}
+       <div class="card-content">
+        <h3>{product.title?.rendered}</h3>
+        {product.acf?.short_summary && <p>{product.acf.short_summary}</p>}
+        <a href={`/products/${product.slug}`} class="cta">{product.acf?.cta_label || '立即洽詢'}</a>
+       </div>
+      </div>
+     ))}
+    </div>
+   </div>
+  </section>
+ </main>
 </Layout>
 
 <style>
-	:root {
-		--bg: #0f0f0f;
-		--surface: #1a1a1a;
-		--primary: #d4af37;
-		--text: #e0e0e0;
-		--text-muted: #a0a0a0;
-	}
-	body {
-		background: var(--bg);
-		color: var(--text);
-		font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-		margin: 0;
-	}
-	.container {
-		max-width: 1000px;
-		margin: 0 auto;
-		padding: 0 20px;
-	}
-	.hero {
-		background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=1200');
-		background-size: cover;
-		background-position: center;
-		padding: 80px 0;
-		text-align: center;
-		border-bottom: 2px solid var(--primary);
-	}
-	h1 { font-size: 3rem; margin: 0; color: var(--primary); letter-spacing: 4px; }
-	.tagline { font-size: 1.2rem; opacity: 0.8; margin: 10px 0 30px; }
-	.nav-links { font-weight: bold; font-size: 0.9rem; letter-spacing: 1px; color: var(--primary); }
-	
-	.section { padding: 60px 0; }
-	.alt-bg { background: #0a0a0a; }
-	.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-	h2 { border-left: 4px solid var(--primary); padding-left: 15px; margin: 0; }
-	
-	.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-	.card { background: var(--surface); border-radius: 8px; overflow: hidden; transition: transform 0.3s; border: 1px solid #333; }
-	.card:hover { transform: translateY(-5px); }
-	.card-image { height: 200px; background-size: cover; background-position: center; }
-	.card-content { padding: 25px; }
-	.date { font-size: 0.8rem; color: var(--primary); font-weight: bold; }
-	h3 { margin: 10px 0; font-size: 1.4rem; }
-	p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
-	.status-tag { display: inline-block; padding: 4px 12px; background: #28a745; color: white; border-radius: 4px; font-size: 0.8rem; margin-top: 15px; }
-	.cta { display: inline-block; margin-top: 15px; color: var(--primary); font-weight: bold; text-decoration: underline; }
-	.more-link { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
+ :root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --primary: #d4af37;
+  --text: #e0e0e0;
+  --text-muted: #a0a0a0;
+ }
+ body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+  margin: 0;
+ }
+ .container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+ }
+ .hero {
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=1200');
+  background-size: cover;
+  background-position: center;
+  padding: 80px 0;
+  text-align: center;
+  border-bottom: 2px solid var(--primary);
+ }
+ h1 { font-size: 3rem; margin: 0; color: var(--primary); letter-spacing: 4px; }
+ .tagline { font-size: 1.2rem; opacity: 0.8; margin: 10px 0 30px; }
+ .nav-links { font-weight: bold; font-size: 0.9rem; letter-spacing: 1px; color: var(--primary); }
+ .section { padding: 60px 0; }
+ .alt-bg { background: #0a0a0a; }
+ .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+ h2 { border-left: 4px solid var(--primary); padding-left: 15px; margin: 0; }
+ .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+ .card { background: var(--surface); border-radius: 8px; overflow: hidden; transition: transform 0.3s; border: 1px solid #333; }
+ .card:hover { transform: translateY(-5px); }
+ .card-image { height: 200px; background-size: cover; background-position: center; }
+ .card-content { padding: 25px; }
+ .date { font-size: 0.8rem; color: var(--primary); font-weight: bold; }
+ h3 { margin: 10px 0; font-size: 1.4rem; }
+ p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+ .status-tag { display: inline-block; padding: 4px 12px; background: #28a745; color: white; border-radius: 4px; font-size: 0.8rem; margin-top: 15px; }
+ .cta { display: inline-block; margin-top: 15px; color: var(--primary); font-weight: bold; text-decoration: underline; }
+ .more-link { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
 </style>
