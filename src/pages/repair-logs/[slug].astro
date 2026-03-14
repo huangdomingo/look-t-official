@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchRepairLogBySlug, fetchRepairLogs } from '../../lib/wordpress';
+
+export async function getStaticPaths() {
+  const logs = await fetchRepairLogs(100);
+  return logs.map((log: any) => ({
+    params: { slug: log.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+const log = await fetchRepairLogBySlug(slug!);
+if (!log) return Astro.redirect('/repair-logs');
+---
+
+<Layout title={`${log.title?.rendered} | Look-T 真空管工作室`}>
+  <main>
+    <div class="container">
+      <a href="/repair-logs" class="back">← 返回維修日誌</a>
+
+      <article class="log">
+        {log._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
+          <img class="hero-img" src={log._embedded['wp:featuredmedia'][0].source_url} alt={log.title?.rendered} />
+        )}
+
+        <div class="meta">
+          <span class="date">{log.date?.slice(0, 10)}</span>
+          {log.acf?.brand && <span class="tag">{log.acf.brand}</span>}
+          {log.acf?.model && <span class="tag">{log.acf.model}</span>}
+          {log.acf?.category && <span class="tag">{log.acf.category}</span>}
+        </div>
+
+        <h1>{log.title?.rendered}</h1>
+
+        {log.acf?.symptom && (
+          <div class="info-box">
+            <h3>症狀</h3>
+            <p>{log.acf.symptom}</p>
+          </div>
+        )}
+
+        {log.acf?.solution_summary && (
+          <div class="info-box">
+            <h3>處置摘要</h3>
+            <p>{log.acf.solution_summary}</p>
+          </div>
+        )}
+
+        <div class="content" set:html={log.content?.rendered} />
+      </article>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root { --bg: #0f0f0f; --surface: #1a1a1a; --primary: #d4af37; --text: #e0e0e0; --text-muted: #a0a0a0; }
+  body { background: var(--bg); color: var(--text); font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; margin: 0; }
+  .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+  .back { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
+  .back:hover { text-decoration: underline; }
+  .log { margin-top: 30px; }
+  .hero-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 25px; }
+  .meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 15px; }
+  .date { font-size: 0.85rem; color: var(--primary); font-weight: bold; }
+  .tag { padding: 3px 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; font-size: 0.8rem; color: var(--text-muted); }
+  h1 { font-size: 2rem; color: var(--primary); margin: 0 0 25px; }
+  .info-box { background: var(--surface); border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; padding: 20px 25px; margin: 0 0 20px; }
+  .info-box h3 { margin: 0 0 8px; font-size: 0.95rem; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
+  .info-box p { margin: 0; color: var(--text-muted); line-height: 1.7; }
+  .content { line-height: 1.8; color: var(--text); margin-top: 30px; }
+</style>
