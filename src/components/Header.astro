@@ -1,0 +1,77 @@
+---
+const navLinks = [
+  { href: "/", label: "首頁" },
+  { href: "/about", label: "關於我們" },
+  { href: "/products", label: "產品型錄" },
+  { href: "/repair-logs", label: "維修實錄" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/contact", label: "聯絡我們" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">
+      <span class="logo-text">Look-T</span>
+      <span class="logo-sub">真空管工作室</span>
+    </a>
+    <nav class="nav">
+      {navLinks.map(link => (
+        <a href={link.href}
+           class={`nav-link ${currentPath === link.href ? 'active' : ''}`}>
+          {link.label}
+        </a>
+      ))}
+    </nav>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </div>
+  <nav class="mobile-nav" id="mobileNav">
+    {navLinks.map(link => (
+      <a href={link.href} class="mobile-link">{link.label}</a>
+    ))}
+  </nav>
+</header>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger?.addEventListener('click', () => {
+    mobileNav?.classList.toggle('open');
+  });
+</script>
+
+<style>
+  .site-header {
+    background: #0a0a0a;
+    border-bottom: 1px solid #2a2a2a;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { text-decoration: none; display: flex; flex-direction: column; line-height: 1.2; }
+  .logo-text { font-size: 1.4rem; font-weight: bold; color: #d4af37; letter-spacing: 2px; }
+  .logo-sub { font-size: 0.7rem; color: #a0a0a0; letter-spacing: 1px; }
+  .nav { display: flex; gap: 30px; }
+  .nav-link { color: #e0e0e0; text-decoration: none; font-size: 0.9rem; letter-spacing: 1px; transition: color 0.2s; }
+  .nav-link:hover, .nav-link.active { color: #d4af37; }
+  .hamburger { display: none; background: none; border: none; color: #d4af37; font-size: 1.5rem; cursor: pointer; }
+  .mobile-nav { display: none; flex-direction: column; background: #0a0a0a; padding: 10px 20px 20px; border-top: 1px solid #2a2a2a; }
+  .mobile-nav.open { display: flex; }
+  .mobile-link { color: #e0e0e0; text-decoration: none; padding: 12px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.95rem; }
+  .mobile-link:last-child { border-bottom: none; }
+  @media (max-width: 768px) {
+    .nav { display: none; }
+    .hamburger { display: block; }
+  }
+</style>

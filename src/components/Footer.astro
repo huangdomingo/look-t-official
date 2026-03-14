@@ -1,0 +1,56 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo-text">Look-T</span>
+        <span class="logo-sub">真空管工作室</span>
+        <p class="tagline">追求極致音質的工藝美學</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>快速連結</h4>
+        <a href="/about">關於我們</a>
+        <a href="/products">產品型錄</a>
+        <a href="/repair-logs">維修實錄</a>
+        <a href="/faq">常見問答</a>
+        <a href="/contact">聯絡我們</a>
+      </div>
+
+      <div class="footer-contact">
+        <h4>聯絡資訊</h4>
+        <p>預約試聽／維修洽詢</p>
+        <a href="/contact" class="cta-btn">立即聯絡</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {year} Look-T 真空管工作室．All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: #050505; border-top: 1px solid #2a2a2a; margin-top: 80px; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; padding: 50px 0 30px; }
+  .footer-brand { display: flex; flex-direction: column; }
+  .logo-text { font-size: 1.4rem; font-weight: bold; color: #d4af37; letter-spacing: 2px; }
+  .logo-sub { font-size: 0.7rem; color: #a0a0a0; letter-spacing: 1px; margin-bottom: 12px; }
+  .tagline { color: #666; font-size: 0.9rem; margin: 0; }
+  .footer-links, .footer-contact { display: flex; flex-direction: column; gap: 10px; }
+  h4 { color: #d4af37; font-size: 0.85rem; letter-spacing: 2px; margin: 0 0 10px; text-transform: uppercase; }
+  .footer-links a { color: #a0a0a0; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+  .footer-links a:hover { color: #d4af37; }
+  .footer-contact p { color: #a0a0a0; font-size: 0.9rem; margin: 0; }
+  .cta-btn { display: inline-block; margin-top: 10px; padding: 10px 24px; background: #d4af37; color: #000; font-weight: bold; border-radius: 4px; text-decoration: none; font-size: 0.9rem; width: fit-content; }
+  .cta-btn:hover { opacity: 0.85; }
+  .footer-bottom { border-top: 1px solid #1a1a1a; padding: 20px 0; text-align: center; }
+  .footer-bottom p { color: #444; font-size: 0.85rem; margin: 0; }
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+  }
+</style>

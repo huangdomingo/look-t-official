@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="關於我們 | Look-T 真空管工作室" description="Look-T 真空管工作室的故事與理念">
+  <main>
+    <header class="page-hero">
+      <div class="container">
+        <h1>關於我們</h1>
+        <p>About Look-T</p>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container">
+        <div class="content-block">
+          <h2>工作室的故事</h2>
+          <p>Look-T 真空管工作室由一群對真空管音響懷有熱情的職人所創立，致力於為每一位愛樂者提供最純粹的聆聽體驗。</p>
+          <p>我們相信，音樂不只是聲音，而是情感的傳遞。真空管特有的溫潤音色，讓每一個音符都充滿生命力。</p>
+        </div>
+
+        <div class="content-block">
+          <h2>我們的專長</h2>
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🔧</div>
+              <h3>真空管維修</h3>
+              <p>從老式機型到現代設備，我們擁有豐富的維修經驗，讓您珍愛的器材重獲新生。</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🎵</div>
+              <h3>Plasma Tweeter</h3>
+              <p>自製離子高音單體，突破傳統振膜限制，呈現極致透明的高頻表現。</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3>Tube Amp 製作</h3>
+              <p>手工打造的真空管擴大機，每一台都是獨一無二的工藝品。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-block">
+          <h2>我們的承諾</h2>
+          <p>每一件交到我們手上的器材，我們都以最嚴謹的態度對待。從診斷、維修到測試，每個環節都精益求精，只為還原最真實的音樂。</p>
+          <a href="/contact" class="cta-btn">預約諮詢</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  :root { --bg: #0f0f0f; --surface: #1a1a1a; --primary: #d4af37; --text: #e0e0e0; --text-muted: #a0a0a0; }
+  .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+  .page-hero { padding: 60px 0; text-align: center; border-bottom: 2px solid var(--primary); }
+  h1 { font-size: 2.5rem; margin: 0; color: var(--primary); }
+  .page-hero p { color: var(--text-muted); margin: 10px 0 0; letter-spacing: 2px; }
+  .section { padding: 60px 0; }
+  .content-block { margin-bottom: 60px; }
+  h2 { font-size: 1.6rem; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 15px; margin: 0 0 25px; }
+  p { color: var(--text-muted); line-height: 1.9; font-size: 1rem; margin: 0 0 15px; }
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 10px; }
+  .feature-card { background: var(--surface); border: 1px solid #333; border-radius: 8px; padding: 28px 24px; }
+  .feature-icon { font-size: 2rem; margin-bottom: 12px; }
+  h3 { color: var(--text); font-size: 1.1rem; margin: 0 0 10px; }
+  .cta-btn { display: inline-block; margin-top: 10px; padding: 14px 35px; background: var(--primary); color: #000; font-weight: bold; border-radius: 4px; text-decoration: none; font-size: 1rem; }
+  .cta-btn:hover { opacity: 0.85; }
+</style>
