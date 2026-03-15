@@ -1,8 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { fetchProducts, fetchRepairLogs, fetchPosts } from '../lib/wordpress';
 import { fetchProducts, fetchRepairLogs } from '../lib/wordpress';
 
 const products = await fetchProducts(6);
+const posts = await fetchPosts(3);
 const repairLogs = await fetchRepairLogs(4);
 ---
 
@@ -37,6 +39,32 @@ const repairLogs = await fetchRepairLogs(4);
      ))}
     </div>
    </div>
+  </section>
+
+<section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>最新文章</h2>
+        <a href="/blog" class="more-link">查看全部文章 →</a>
+      </div>
+      <div class="grid">
+        {posts.map((post: any) => {
+          const thumb = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+          return (
+            <a href={`/blog/${post.slug}`} class="card" style="text-decoration:none;">
+              {thumb && (
+                <div class="card-image" style={`background-image: url(${thumb})`}></div>
+              )}
+              <div class="card-content">
+                <span class="date">{post.date?.slice(0, 10)}</span>
+                <h3 set:html={post.title.rendered} />
+                <p set:html={post.excerpt?.rendered?.replace(/<[^>]+>/g, '').slice(0, 80) + '...'} />
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
   </section>
 
   <section class="section alt-bg">

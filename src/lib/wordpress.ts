@@ -34,3 +34,16 @@ export async function fetchFAQs(perPage = 100) {
   if (!res.ok) throw new Error('Failed to fetch FAQs');
   return res.json();
 }
+// ── 一般文章（部落格）──
+export async function fetchPosts(perPage = 12) {
+  const res = await fetch(`${WP_API}/posts?per_page=${perPage}&orderby=date&order=desc&_embed`);
+  if (!res.ok) throw new Error('Failed to fetch posts');
+  return res.json();
+}
+
+export async function fetchPostBySlug(slug: string) {
+  const res = await fetch(`${WP_API}/posts?slug=${slug}&_embed`);
+  if (!res.ok) throw new Error('Failed to fetch post');
+  const data = await res.json();
+  return data[0] ?? null;
+}
