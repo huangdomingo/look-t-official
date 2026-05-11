@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { fetchPostBySlug, fetchPosts } from '../../lib/wordpress';
+import { fetchAllPosts, fetchPostBySlug } from '../../lib/wordpress';
 
 export async function getStaticPaths() {
-  const posts = await fetchPosts(100);
+  const posts = await fetchAllPosts();
   return posts.map((post: any) => ({ params: { slug: post.slug } }));
 }
 

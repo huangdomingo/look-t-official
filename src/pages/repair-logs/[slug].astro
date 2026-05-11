@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { fetchRepairLogBySlug, fetchRepairLogs } from '../../lib/wordpress';
+import { fetchAllRepairLogs, fetchRepairLogBySlug } from '../../lib/wordpress';
 
 export async function getStaticPaths() {
-  const logs = await fetchRepairLogs(100);
+  const logs = await fetchAllRepairLogs();
   return logs.map((log: any) => ({
     params: { slug: log.slug }
   }));

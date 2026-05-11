@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { fetchProductBySlug, fetchProducts } from '../../lib/wordpress';
+import { fetchAllProducts, fetchProductBySlug } from '../../lib/wordpress';
 
 export async function getStaticPaths() {
-  const products = await fetchProducts(100);
+  const products = await fetchAllProducts();
   return products.map((product: any) => ({
     params: { slug: product.slug }
   }));

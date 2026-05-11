@@ -1,8 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { fetchPosts } from '../../lib/wordpress';
+import { fetchAllPosts } from '../../lib/wordpress';
 
-const posts = await fetchPosts(12);
+const posts = await fetchAllPosts();
 ---
 
 <Layout title="部落格 — Look-T 真空管工作室">

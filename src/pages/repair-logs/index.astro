@@ -1,8 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { fetchRepairLogs } from '../../lib/wordpress';
+import { fetchAllRepairLogs } from '../../lib/wordpress';
 
-const repairLogs = await fetchRepairLogs(100);
+const repairLogs = await fetchAllRepairLogs();
 ---
 
 <Layout title="維修日誌 | Look-T 真空管工作室">
