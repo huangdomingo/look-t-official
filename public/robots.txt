@@ -1,0 +1,4 @@
+Sitemap: https://look-t.com.tw/sitemap-index.xml
+
+User-agent: *
+Disallow:
